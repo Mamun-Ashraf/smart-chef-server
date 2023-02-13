@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -8,11 +9,7 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// userName: smartChefDbUser
-// pass: 53NECqFkx0e61QKX
-
-
-const uri = "mongodb+srv://smartChefDbUser:53NECqFkx0e61QKX@cluster0.laf8zrf.mongodb.net/?retryWrites=true&w=majority";
+const uri = `mongodb+srv://${process.env.DB_USER}:${DB_PASSWORD}@cluster0.laf8zrf.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 async function run() {
@@ -48,6 +45,7 @@ async function run() {
 
         app.post('/review', async (req, res) => {
             const review = req.body;
+            console.log(review);
             const result = reviewCollection.insertOne(review);
             res.send(result);
         })
