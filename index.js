@@ -9,7 +9,7 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${DB_PASSWORD}@cluster0.laf8zrf.mongodb.net/?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.laf8zrf.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 async function run() {
@@ -45,7 +45,6 @@ async function run() {
 
         app.post('/review', async (req, res) => {
             const review = req.body;
-            console.log(review);
             const result = reviewCollection.insertOne(review);
             res.send(result);
         })
