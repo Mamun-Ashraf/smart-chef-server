@@ -16,6 +16,7 @@ async function run() {
     try {
         const serviceCollection = client.db('smartChef').collection('services');
         const reviewCollection = client.db('smartChef').collection('reviews');
+        const itemCollection = client.db('smartChef').collection('items')
 
         app.get('/serviceAll', async (req, res) => {
             const query = {};
@@ -23,18 +24,33 @@ async function run() {
             const services = await cursor.toArray();
             res.send(services);
         })
+
         app.get('/services', async (req, res) => {
             const query = {};
             const cursor = serviceCollection.find(query).limit(3);
             const services = await cursor.toArray();
             res.send(services);
         })
+
         app.get('/services/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
             const service = await serviceCollection.findOne(query);
             res.send(service);
         })
+
+        // app.patch('/services/:id', async (req, res) => {
+        //     const id = req.params.id;
+        //     const review = req.body;
+        //     const query = { _id: new ObjectId(id) };
+        //     const updatedDoc = {
+        //         $set: {
+        //             review: review
+        //         }
+        //     }
+        //     const result = await serviceCollection.updateOne(query, updatedDoc);
+        //     res.send(result);
+        // })
 
         app.get('/reviews', async (req, res) => {
             const query = {};
@@ -44,8 +60,8 @@ async function run() {
         })
 
         app.post('/review', async (req, res) => {
-            const review = req.body;
-            const result = await reviewCollection.insertOne(review);
+            const reviewInfo = req.body;
+            const result = await reviewCollection.insertOne(reviewInfo);
             res.send(result);
         })
 
@@ -53,6 +69,17 @@ async function run() {
             const addService = req.body;
             const result = await serviceCollection.insertOne(addService);
             res.send(result);
+        })
+
+        app.get('/foodsAll', async (req, res) => {
+            const query = {};
+            const foodsAll = await itemCollection.find(query).toArray();
+            res.send(foodsAll);
+        })
+        app.get('/foods', async (req, res) => {
+            const query = {};
+            const foods = await itemCollection.find(query).limit(3).toArray();
+            res.send(foods);
         })
 
     }
